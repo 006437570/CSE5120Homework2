@@ -9,7 +9,7 @@ def minimax(game_state: GameStatus, depth: int, maximizingPlayer: bool, alpha=fl
 
 	"""
 ---------ok I am going to include some psuedo code, given from a youtube video from the instructions as a "guide" to approach this:
-function minimax(position, depth, maximizingPlayer):
+function minimax(position, depth, alpha, beta, maximizingPlayer):
 	if depth = 0 or node is terminal node:
  		newScores = game_state.get(terminal)
    		return newScores, None
