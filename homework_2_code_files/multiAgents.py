@@ -27,9 +27,9 @@ function minimax(position, depth, maximizingPlayer):
 
 ---------The following should be our final code to that we will uncomment when ready: 
  	if maximizingPlayer:   #conditional statement to first check if it will be our MAX player
-  	return best_value, best_move
    		bestValue = float('-inf') #if its MAX, it must be set to the worst possible
-  	
+  	return best_value, best_move
+   
    	else:  # If not our MAX player
     		bestValue = float('inf') #if its MIN, it must be set to best possible
     	return best_value, best_move
