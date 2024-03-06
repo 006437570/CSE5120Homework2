@@ -8,10 +8,30 @@ def minimax(game_state: GameStatus, depth: int, maximizingPlayer: bool, alpha=fl
 		return newScores, None
 
 	"""
+---------ok I am going to include some psuedo code, given from a youtube video from the instructions as a "guide" to approach this:
+function minimax(position, depth, maximizingPlayer):
+	if depth = 0 or node is terminal node:
+ 		newScores = game_state.get(terminal)
+   		return newScores, None
+	if maximizingPlayer:
+ 		bestValue = -infinity
+   		for each child of node:
+     			value = minimax(child, depth, -1, FALSE)
+			bestValue, best_move
+   	else:
+    		bestValue = +infinity
+      		for each child of node:
+			value = minimax(child, depth, -1, TRUE)
+   			bestValue = min(bestValue, value)
+      		return bestValue, best_move
+
+---------The following should be our final code to that we will uncomment when ready: 
  	if maximizingPlayer:   #conditional statement to first check if it will be our MAX player
   	return best_value, best_move
+   		bestValue = float('-inf') #if its MAX, it must be set to the worst possible
   	
    	else:  # If not our MAX player
+    		bestValue = float('inf') #if its MIN, it must be set to best possible
     	return best_value, best_move
 
   
