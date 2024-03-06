@@ -2,13 +2,17 @@ from GameStatus_5120 import GameStatus
 
 
 def minimax(game_state: GameStatus, depth: int, maximizingPlayer: bool, alpha=float('-inf'), beta=float('inf')):
-	terminal = game_state.is_terminal()
+	terminal = game_state.is_terminal()  #this will check if current state is a terminal state 
 	if (depth==0) or (terminal):
 		newScores = game_state.get_scores(terminal)
 		return newScores, None
 
 	"""
- 	if maximizingPlayer:   #conditional statement to check if it will be our MAX player
+ 	if maximizingPlayer:   #conditional statement to first check if it will be our MAX player
+  	return best_value, best_move
+  	
+   	else:  # If not our MAX player
+    	return best_value, best_move
 
   
     YOUR CODE HERE TO FIRST CHECK WHICH PLAYER HAS CALLED THIS FUNCTION (MAXIMIZING OR MINIMIZING PLAYER)
@@ -22,7 +26,7 @@ def minimax(game_state: GameStatus, depth: int, maximizingPlayer: bool, alpha=fl
 	# return value, best_move
 
 def negamax(game_status: GameStatus, depth: int, turn_multiplier: int, alpha=float('-inf'), beta=float('inf')):
-	terminal = game_status.is_terminal()
+	terminal = game_status.is_terminal()  #this will check if current state is a terminal state 
 	if (depth==0) or (terminal):
 		scores = game_status.get_negamax_scores(terminal)
 		return scores, None
