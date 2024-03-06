@@ -8,6 +8,9 @@ def minimax(game_state: GameStatus, depth: int, maximizingPlayer: bool, alpha=fl
 		return newScores, None
 
 	"""
+ 	if maximizingPlayer:   #conditional statement to check if it will be our MAX player
+
+  
     YOUR CODE HERE TO FIRST CHECK WHICH PLAYER HAS CALLED THIS FUNCTION (MAXIMIZING OR MINIMIZING PLAYER)
     YOU SHOULD THEN IMPLEMENT MINIMAX WITH ALPHA-BETA PRUNING AND RETURN THE FOLLOWING TWO ITEMS
     1. VALUE
