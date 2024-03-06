@@ -33,20 +33,32 @@ function minimax(position, depth, alpha, beta, maximizingPlayer):
       		return bestValue, best_move
 
 ---------The following should be our final code to that we will uncomment when ready: 
-
-	 if maximizingPlayer:
-  		Value = float('-inf')
-	        bestMove = None  # Initialize best move
-	        for move in game_state.get_moves():
-	            new_state = game_state.get_new_state(move)
-	            Current_value  = minimax(new_state, depth - 1, False, alpha, beta)
-	            if Current_value > Value:
-	                Value = Current_value
-	                bestMove = move
-	            alpha = max(alpha, Current_value)
-	            if beta <= alpha:
-	                break
-	        return Value, bestMove
+  if maximizingPlayer:
+    Value = float('-inf')
+    best_Move = None  # Initialize best move
+    for move in game_state.get_moves():
+      new_state = game_state.get_new_state(move)
+      Current_value = minimax(new_state, depth - 1, False, alpha, beta)
+      if Current_value > Value:
+        Value = Current_value
+        best_Move = move
+      alpha = max(alpha, Current_value)
+      if beta <= alpha:
+        break
+    return Value, best_Move
+  else:
+    Value = float('inf')  # Initialize best value for MIN
+    best_Move = None  # Initialize best move
+    for move in game_state.get_moves():
+      new_state = game_state.get_new_state(move)
+      Current_value = minimax(new_state, depth - 1, True, alpha, beta)
+      if Current_value < Value:
+        Value = Currrent_value
+        best_Move = move
+      beta = min(beta, value)
+      if beta <= alpha:
+        break
+    return Value, best_Move
 
   
     YOUR CODE HERE TO FIRST CHECK WHICH PLAYER HAS CALLED THIS FUNCTION (MAXIMIZING OR MINIMIZING PLAYER)
