@@ -16,7 +16,7 @@ function minimax(position, depth, alpha, beta, maximizingPlayer):
 	if maximizingPlayer:
  		bestValue = -infinity
    		for each child of node:
-     			value = minimax(child, depth, -1, FALSE)
+     			value = minimax(child, depth, -1, alpha, beta, FALSE)
 			bestValue = max(bestValue, value)
    			alpha = max(alpha, value)
       			if beta <= alpha
@@ -26,7 +26,7 @@ function minimax(position, depth, alpha, beta, maximizingPlayer):
    	else:
     		bestValue = +infinity
       		for each child of node:
-			value = minimax(child, depth, -1, TRUE)
+			value = minimax(child, depth, -1, alpha, beta, TRUE)
    			bestValue = min(bestValue, value)
       			if beta <= alpha
 	 			break
