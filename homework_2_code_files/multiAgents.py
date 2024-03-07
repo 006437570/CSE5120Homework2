@@ -77,11 +77,20 @@ def negamax(game_status: GameStatus, depth: int, turn_multiplier: int, alpha=flo
 
 	"""
 ------------------------ The line of code under is final, when ready to uncomment--------------
-
-	Value = float ('-inf') #both max and min are treated as max and need worst possible
+	
+	Value = float('-inf') #both max and min are treated as max and need worst possible
  	best_Move = None
 
-  
+  	for move in game_status.get_moves():
+   		new_state = game_status.get_new_state(move)
+     		Current_value = -negamax(new_state, depth -1, -turn_multiplier, -alpha, -beta)
+       		if Current_value > Value:
+	 		Value = Current_value
+    			best_Move = move
+       		alpha = max(alpha, Current_value)
+	 	if beta <= alpha:
+   			break
+      
 	return Value, best_Move
 
 
