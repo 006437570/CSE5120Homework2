@@ -69,8 +69,6 @@ function minimax(position, depth, alpha, beta, maximizingPlayer):
     THE LINE TO RETURN THESE TWO IS COMMENTED BELOW WHICH YOU CAN USE
     """
 
-	# return value, best_move
-
 def negamax(game_status: GameStatus, depth: int, turn_multiplier: int, alpha=float('-inf'), beta=float('inf')):
 	terminal = game_status.is_terminal()  #this will check if current state is a terminal state 
 	if (depth==0) or (terminal):
@@ -78,6 +76,15 @@ def negamax(game_status: GameStatus, depth: int, turn_multiplier: int, alpha=flo
 		return scores, None
 
 	"""
+------------------------ The line of code under is final, when ready to uncomment--------------
+
+	Value = float ('-inf') #both max and min are treated as max and need worst possible
+ 	best_Move = None
+
+  
+	return Value, best_Move
+
+
     YOUR CODE HERE TO CALL NEGAMAX FUNCTION. REMEMBER THE RETURN OF THE NEGAMAX SHOULD BE THE OPPOSITE OF THE CALLING
     PLAYER WHICH CAN BE DONE USING -NEGAMAX(). THE REST OF YOUR CODE SHOULD BE THE SAME AS MINIMAX FUNCTION.
     YOU ALSO DO NOT NEED TO TRACK WHICH PLAYER HAS CALLED THE FUNCTION AND SHOULD NOT CHECK IF THE CURRENT MOVE
