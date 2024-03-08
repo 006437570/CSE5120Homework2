@@ -16,7 +16,8 @@ PLEASE READ THE COMMENTS BELOW AND THE HOMEWORK DESCRIPTION VERY CAREFULLY BEFOR
 """
 import pygame
 import numpy as np
-from GameStatus_5120 import GameStatus
+from GameStatus_5120 import GameStatus # This import has me a bit confused throughout the file there are lines 'game_state' that has me confused on their functionality!!!!!!
+#from GameStatus_5120 import GameStatus as game_state  """Maybe this is correct for game_state stuff idk?????"""
 from multiAgents import minimax, negamax
 import sys, random
 
@@ -133,12 +134,12 @@ class RandomBoardTicTacToe:
         else:
             pygame.display.set_caption("Tic Tac Toe - X's turn")
 
-
+    #FINSIHED
     def draw_circle(self, x, y):
         # Draws a circle at the center of the block
         pygame.draw.circle(self.screen, self.BLUE, (x,y+self.GUI_HEIGHT), self.WIDTH/2, 5)
         
-
+    # FINSIHED
     def draw_cross(self, x, y):
         # Draws 2 diagonal lines that reach from one corner of a grid cell 
         # to the other. 
@@ -155,10 +156,8 @@ class RandomBoardTicTacToe:
         YOUR RETURN VALUE SHOULD BE TRUE OR FALSE TO BE USED IN OTHER PARTS OF THE GAME
         """
     
-
     def move(self, move):
         self.game_state = self.game_state.get_new_state(move)
-
 
     def play_ai(self):
         """
@@ -176,7 +175,7 @@ class RandomBoardTicTacToe:
         """ USE self.game_state.get_scores(terminal) HERE TO COMPUTE AND DISPLAY THE FINAL SCORES """
 
 
-
+    #FINISHED... I think
     def game_reset(self):
         self.draw_game()
         """
@@ -198,7 +197,8 @@ class RandomBoardTicTacToe:
     def play_game(self, mode = "player_vs_ai"):
         done = False
         gameStarted = False #Bool that tracks if game has started for certain game settings
-        drawShape = 1 # Value that will fill tttBoard array
+        playerTurn = True #Bool that tracks if it is the player's turn
+        drawShape = "O" # Value that will fill tttBoard array
 
         clock = pygame.time.Clock()
 
@@ -235,16 +235,6 @@ class RandomBoardTicTacToe:
                     selectedRow = int((mouseCoord[1] - self.GUI_HEIGHT)//(self.width//self.GRID_SIZE))
                     print("Grid clicked at:", [selectedCol, selectedRow])
 
-                    if gameStarted:
-                        # If game hasn't started yet, but user hits start button, then let user know
-                        if self.startButton.collidepoint(mouseCoord):
-                            print("Game already started...")
-
-                        # Clears the grid, only works if the user has started the game, as it would be redundant other wise
-                        if self.resetButton.collidepoint(mouseCoord):
-                            print("Reseting game...")
-                            gameStarted = False
-                            tictactoegame.game_reset()
 
                     # Buttons only work if a game isn't in progress
                     if not gameStarted:
@@ -255,18 +245,12 @@ class RandomBoardTicTacToe:
 
                         """
                         #This is code that allows us to increase the size of the window.
-                        #Might use later to create drop down menu to resize window, but idk
-                        self.width += 50
-                        self.height += 50
-                        self.size = self.width, self.height
-                        # Buttons that increases the size of the grid
-                        # Wont work if the game has been started to not mess with any existing game
                         """
-
                         if self.smallResolutionButton.collidepoint(mouseCoord):
                             self.width = 400
                             self.height = 500
                             self.size = self.width, self.height
+                            self.GUI_HEIGHT = self.size[1]-self.size[0]
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
                             tictactoegame.game_reset()
@@ -274,6 +258,7 @@ class RandomBoardTicTacToe:
                             self.width = 600
                             self.height = 750
                             self.size = self.width, self.height
+                            self.GUI_HEIGHT = self.size[1]-self.size[0]
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
                             tictactoegame.game_reset()
@@ -281,10 +266,15 @@ class RandomBoardTicTacToe:
                             self.width = 800
                             self.height = 1000
                             self.size = self.width, self.height
+                            self.GUI_HEIGHT = self.size[1]-self.size[0]
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
                             tictactoegame.game_reset()
 
+                        """
+                        # Buttons that increases the size of the grid
+                        # Wont work if the game has been started to not mess with any existing game
+                        """
                         if self.gridResizeButton3.collidepoint(mouseCoord):
                             self.GRID_SIZE = 3
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
@@ -309,14 +299,26 @@ class RandomBoardTicTacToe:
 
                         # Buttons to swap between nought or cross
                         if self.noughtButton.collidepoint(mouseCoord):
-                            print("Switching to nought (0)")
-                            drawShape = 1
+                            print("Switching to nought (O)")
+                            drawShape = "O"
                         if self.crossButton.collidepoint(mouseCoord):
                             print("Switching to cross (X)")
-                            drawShape = 2
+                            drawShape = "X"
 
-                    # if the clicked area falls within the grid and the user has started the game...
-                    if selectedCol < self.GRID_SIZE and 0 <= selectedRow < self.GRID_SIZE and gameStarted == True:
+                    #Buttons that work if a game is in progress
+                    if gameStarted:
+                        # If game hasn't started yet, but user hits start button, then let user know
+                        if self.startButton.collidepoint(mouseCoord):
+                            print("Game already started...")
+
+                        # Clears the grid, only works if the user has started the game, as it would be redundant other wise
+                        if self.resetButton.collidepoint(mouseCoord):
+                            print("Reseting game...")
+                            gameStarted = False
+                            tictactoegame.game_reset()
+
+                    # if a game has started and its the player's turn
+                    if selectedCol < self.GRID_SIZE and 0 <= selectedRow < self.GRID_SIZE and gameStarted == True and playerTurn:
                         #if the selected grid hasn't been choosen yet...
                         if self.tttBoard[selectedRow][selectedCol] == 0:
                             """
@@ -324,21 +326,25 @@ class RandomBoardTicTacToe:
                             #FIND A WAY TO DETERMINE WHETHER TO DRAW A CROSS OR A CIRCLE BASED ON PLAYER TURN
                             #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             """
+                            #end the player's turn
+                            #playerTurn = False
+
                             # Update tic-tac-toe board with the selected value
-                            self.tttBoard[selectedRow][selectedCol] = drawShape
+                            # This is for human player because the value is at 1
+                            self.tttBoard[selectedRow][selectedCol] = 1
                             print(np.array(self.tttBoard))
 
                             # If user selected a 'nought' then draw circle
-                            if drawShape == 1:
+                            if drawShape == "O":
                                 tictactoegame.draw_circle(((self.MARGIN + self.WIDTH) * selectedCol + self.MARGIN)+self.WIDTH/2, ((self.MARGIN + self.HEIGHT) * selectedRow + self.MARGIN)+self.HEIGHT/2)
                             # If user selected a 'cross' then draw a cross
-                            elif drawShape == 2:
+                            elif drawShape == "X":
                                 tictactoegame.draw_cross((self.MARGIN + self.WIDTH) * selectedCol + self.MARGIN, (self.MARGIN + self.HEIGHT) * selectedRow + self.MARGIN)
 
                         # Debugging to ensure that the user as already selected a spot on the tic-tac-toe grid
                         else:
                             print("Grid:",[selectedRow,selectedCol],"has already been selected...")
-                    
+
                     # Check if the game is human vs human or human vs AI player from the GUI. 
                     # If it is human vs human then your opponent should have the value of the selected cell set to -1
                     # Then draw the symbol for your opponent in the selected cell
