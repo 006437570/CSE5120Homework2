@@ -23,7 +23,7 @@ import sys, random
 mode = "player_vs_ai" # default mode for playing the game (player vs AI)
 
 class RandomBoardTicTacToe:
-    def __init__(self, size = (400, 500)):
+    def __init__(self, size = (600, 750)):
 
         """
         Defines the top portion of the screen to be for the GUI
@@ -84,7 +84,7 @@ class RandomBoardTicTacToe:
         self.resetButton = pygame.Rect((self.width-50,self.GUI_HEIGHT-35), (40,25))
         pygame.draw.rect(self.screen, self.RED, self.resetButton, 0, 2)
 
-        #Increase grid size
+        #Buttons to change grid size
         self.gridResizeButton3 = pygame.Rect((self.width - 105, 10), (25,25))
         pygame.draw.rect(self.screen, self.BLUE, self.gridResizeButton3, 0, 2)
         self.gridResizeButton4 = pygame.Rect((self.width - 70, 10), (25,25))
@@ -99,6 +99,14 @@ class RandomBoardTicTacToe:
         # Buttons for user to select if they want to draw a cross or nought
         self.noughtButton = pygame.draw.circle(self.screen, self.BLUE, (22, self.GUI_HEIGHT-37), 7, 0)
         self.crossButton = pygame.draw.circle(self.screen, self.BLUE, (22, self.GUI_HEIGHT-17), 7, 0)
+
+        #Buttons to change window size
+        self.smallResolutionButton = pygame.Rect((self.width - 210, 10), (25,25))
+        pygame.draw.rect(self.screen, self.BLACK, self.smallResolutionButton, 0, 2)
+        self.mediumResolutionButton = pygame.Rect((self.width - 175, 10), (25,25))
+        pygame.draw.rect(self.screen, self.BLACK, self.mediumResolutionButton, 0, 2)
+        self.largeResolutionButton = pygame.Rect((self.width - 140, 10), (25,25))
+        pygame.draw.rect(self.screen, self.BLACK, self.largeResolutionButton, 0, 2)
 
         """
         Need to add code to keep track of the winner of the current game
@@ -253,7 +261,30 @@ class RandomBoardTicTacToe:
                         self.size = self.width, self.height
                         # Buttons that increases the size of the grid
                         # Wont work if the game has been started to not mess with any existing game
-                            """
+                        """
+
+                        if self.smallResolutionButton.collidepoint(mouseCoord):
+                            self.width = 400
+                            self.height = 500
+                            self.size = self.width, self.height
+                            self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
+                            self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            tictactoegame.game_reset()
+                        if self.mediumResolutionButton.collidepoint(mouseCoord):
+                            self.width = 600
+                            self.height = 750
+                            self.size = self.width, self.height
+                            self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
+                            self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            tictactoegame.game_reset()
+                        if self.largeResolutionButton.collidepoint(mouseCoord):
+                            self.width = 800
+                            self.height = 1000
+                            self.size = self.width, self.height
+                            self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
+                            self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            tictactoegame.game_reset()
+
                         if self.gridResizeButton3.collidepoint(mouseCoord):
                             self.GRID_SIZE = 3
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
