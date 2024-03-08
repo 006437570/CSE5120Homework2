@@ -85,8 +85,12 @@ class RandomBoardTicTacToe:
         pygame.draw.rect(self.screen, self.RED, self.resetButton, 0, 2)
 
         #Increase grid size
-        self.gridButton = pygame.Rect((self.width - 85,10), (75,25))
-        pygame.draw.rect(self.screen, self.BLUE, self.gridButton, 0, 2)
+        self.gridResizeButton3 = pygame.Rect((self.width - 105, 10), (25,25))
+        pygame.draw.rect(self.screen, self.BLUE, self.gridResizeButton3, 0, 2)
+        self.gridResizeButton4 = pygame.Rect((self.width - 70, 10), (25,25))
+        pygame.draw.rect(self.screen, self.BLUE, self.gridResizeButton4, 0 , 2)
+        self.gridResizeButton5 = pygame.Rect((self.width - 35,10), (25,25))
+        pygame.draw.rect(self.screen, self.BLUE, self.gridResizeButton5, 0, 2)
 
         # Buttons that let user select desired game mode (human vs human/human vs computer)
         self.pvpButton = pygame.draw.circle(self.screen, self.BLUE, (22, 17), 7, 0)
@@ -241,21 +245,30 @@ class RandomBoardTicTacToe:
                             print("Starting game...")
                             gameStarted = True
 
-                        # Button that increases the grid width and height by 1 each time it is
+                        """
+                        #This is code that allows us to increase the size of the window.
+                        #Might use later to create drop down menu to resize window, but idk
+                        self.width += 50
+                        self.height += 50
+                        self.size = self.width, self.height
+                        # Buttons that increases the size of the grid
                         # Wont work if the game has been started to not mess with any existing game
-                        # This is temporary, I plan to replace with a drop down menu in the future
-                        if self.gridButton.collidepoint(mouseCoord):
-                            self.GRID_SIZE += 1
                             """
-                            #This is code that allows us to increase the size of the window.
-                            #Might use later to create drop down menu to resize window, but idk
-                            self.width += 50
-                            self.height += 50
-                            self.size = self.width, self.height
-                            """
+                        if self.gridResizeButton3.collidepoint(mouseCoord):
+                            self.GRID_SIZE = 3
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
-                            tictactoegame.game_reset()
+                            tictactoegame.game_reset() #redraw the board to update size
+                        if self.gridResizeButton4.collidepoint(mouseCoord):
+                            self.GRID_SIZE = 4
+                            self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
+                            self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            tictactoegame.game_reset() # redraw board to update size
+                        if self.gridResizeButton5.collidepoint(mouseCoord):
+                            self.GRID_SIZE = 5
+                            self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
+                            self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            tictactoegame.game_reset() #redraw board to update size
 
                         # Buttons to swap between game modes
                         if self.pvpButton.collidepoint(mouseCoord):
