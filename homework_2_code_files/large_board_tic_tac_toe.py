@@ -312,6 +312,13 @@ class RandomBoardTicTacToe:
 
                     #Buttons that work if a game is in progress
                     if gameStarted:
+                        if self.game_state.turn_O:
+                            player1, player2 = 1, -1
+                        else:
+                            player1, player2 = -1, 1
+                        print("Player 1:",player1)
+                        print("Player 2:", player2)
+                            
                         #Change window caption if the game has started
                         tictactoegame.change_turn()
 
