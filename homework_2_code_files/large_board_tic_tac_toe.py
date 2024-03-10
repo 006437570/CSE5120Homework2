@@ -58,6 +58,12 @@ class RandomBoardTicTacToe:
         # This sets the margin between each cell
         self.MARGIN = 5
 
+        # Option select values for GUI
+        self.screenSizeOption = 0
+        
+        # Boolean for AI Negamax/Minimax option select
+        self.aiSelectNegamax = True
+
         # Initialize pygame
         pygame.init()
         self.game_reset()
@@ -87,29 +93,147 @@ class RandomBoardTicTacToe:
         pygame.draw.rect(self.screen, self.RED, self.resetButton, 0, 2)
 
         #Buttons to change grid size
-        self.gridResizeButton3 = pygame.Rect((self.width - 105, 10), (25,25))
+        self.gridResizeButton3 = pygame.Rect((self.width - 105, (self.GUI_HEIGHT/2)-15), (25,25))
         pygame.draw.rect(self.screen, self.BLUE, self.gridResizeButton3, 0, 2)
-        self.gridResizeButton4 = pygame.Rect((self.width - 70, 10), (25,25))
+        self.gridResizeButton4 = pygame.Rect((self.width - 70, (self.GUI_HEIGHT/2)-15), (25,25))
         pygame.draw.rect(self.screen, self.BLUE, self.gridResizeButton4, 0 , 2)
-        self.gridResizeButton5 = pygame.Rect((self.width - 35,10), (25,25))
+        self.gridResizeButton5 = pygame.Rect((self.width - 35,(self.GUI_HEIGHT/2)-15), (25,25))
         pygame.draw.rect(self.screen, self.BLUE, self.gridResizeButton5, 0, 2)
+        
+        #Draw box to show current grid size selection
+        if self.GRID_SIZE == 3:
+            pygame.draw.rect(self.screen, self.WHITE, self.gridResizeButton3, 2, 2)
+        elif self.GRID_SIZE == 4:
+            pygame.draw.rect(self.screen, self.WHITE, self.gridResizeButton4, 2, 2)
+        elif self.GRID_SIZE == 5:
+            pygame.draw.rect(self.screen, self.WHITE, self.gridResizeButton5, 2, 2)
 
         # Buttons that lets user select desired game mode (human vs human/human vs computer)
-        self.pvpButton = pygame.draw.circle(self.screen, self.BLUE, (22, 17), 7, 0)
-        self.pvaButton = pygame.draw.circle(self.screen, self.BLUE, (22, 37), 7, 0)
-
+        self.pvpButton = pygame.draw.circle(self.screen, self.BLUE, (22, 25), 7, 0)
+        self.pvaButton = pygame.draw.circle(self.screen, self.BLUE, (22, 44), 7, 0)
+        # Draw dot to show current game mode selection
+        if mode == "player_vs_ai":
+            pygame.draw.circle(self.screen, self.BLACK, (self.pvaButton.centerx,self.pvaButton.centery), 4, 0)
+        else:
+            pygame.draw.circle(self.screen, self.BLACK, (self.pvpButton.centerx,self.pvpButton.centery), 4, 0)
+        
+        # Button to select AI negamax or minimax
+        self.negamaxButton = pygame.draw.circle(self.screen, self.BLUE, (22, (self.GUI_HEIGHT/2)+8), 7, 0)
+        self.minimaxButton = pygame.draw.circle(self.screen, self.BLUE, (22, (self.GUI_HEIGHT/2)+27), 7, 0)
+        #Draw dot to show current AI algorithm selection
+        if self.aiSelectNegamax == True:   
+            pygame.draw.circle(self.screen, self.BLACK, (self.negamaxButton.centerx,self.negamaxButton.centery), 4, 0)
+        else:
+            pygame.draw.circle(self.screen, self.BLACK, (self.minimaxButton.centerx,self.minimaxButton.centery), 4, 0)
+            
         # Buttons for user to select if they want to draw a cross or nought
-        self.noughtButton = pygame.draw.circle(self.screen, self.BLUE, (22, self.GUI_HEIGHT-37), 7, 0)
-        self.crossButton = pygame.draw.circle(self.screen, self.BLUE, (22, self.GUI_HEIGHT-17), 7, 0)
-
+        self.noughtButton = pygame.draw.circle(self.screen, self.BLUE, (22, self.GUI_HEIGHT-10), 7, 0)
+        self.crossButton = pygame.draw.circle(self.screen, self.BLUE, (66, self.GUI_HEIGHT-10), 7, 0)
+        #Draw dot to show symbol selection
+        if self.game_state.turn_O == True:
+            pygame.draw.circle(self.screen, self.BLACK, (self.noughtButton.centerx,self.noughtButton.centery), 4, 0)
+        else:
+            pygame.draw.circle(self.screen, self.BLACK, (self.crossButton.centerx,self.noughtButton.centery), 4, 0)
+            
+        
         #Buttons to change window size
-        self.smallResolutionButton = pygame.Rect((self.width - 210, 10), (25,25))
+        self.smallResolutionButton = pygame.Rect((self.width - 105, 10), (25,25))
         pygame.draw.rect(self.screen, self.BLACK, self.smallResolutionButton, 0, 2)
-        self.mediumResolutionButton = pygame.Rect((self.width - 175, 10), (25,25))
+        self.mediumResolutionButton = pygame.Rect((self.width - 70, 10), (25,25))
         pygame.draw.rect(self.screen, self.BLACK, self.mediumResolutionButton, 0, 2)
-        self.largeResolutionButton = pygame.Rect((self.width - 140, 10), (25,25))
+        self.largeResolutionButton = pygame.Rect((self.width - 35, 10), (25,25))
         pygame.draw.rect(self.screen, self.BLACK, self.largeResolutionButton, 0, 2)
+        
+        #Draw square to show screen size selection
+        if self.screenSizeOption == 0:
+            #Draw square to show small screen selection
+            pygame.draw.rect(self.screen, self.WHITE, self.smallResolutionButton, 2, 2)
+        elif self.screenSizeOption == 1:
+            #Draw square to show medium screen selection
+            pygame.draw.rect(self.screen, self.WHITE, self.mediumResolutionButton, 2, 2)
+        elif self.screenSizeOption == 2:
+            #Draw square to show large screen selection
+            pygame.draw.rect(self.screen, self.WHITE, self.largeResolutionButton, 2, 2)    
+        
+        
+        #Display Screen for Instructions, information for which symbol is playing, and results
+        self.displayRect = pygame.Rect(((self.width/3), 5), ((self.width/3), self.GUI_HEIGHT-10))
+        pygame.draw.rect(self.screen, (160, 171, 192), self.displayRect, 0, 2)
+        pygame.draw.rect(self.screen, (50,50,50), self.displayRect, 3, 2)
+        
 
+        #Text for GUI=========================================================================
+        #Text Font
+        self.text_font = pygame.font.SysFont("calibri", 14, bold = True)
+        
+        #Game Mode text
+        imgGameModeText = self.text_font.render("Game Mode:", self.text_font, self.BLACK)
+        self.screen.blit(imgGameModeText, (self.pvpButton.topleft[0], self.pvpButton.topleft[1]-16))
+        #PvP Text
+        imgPvpText = self.text_font.render("Player vs Player", self.text_font, self.BLACK)
+        self.screen.blit(imgPvpText, (self.pvpButton.right+5, self.pvpButton.topleft[1]))
+        #PvAI Text
+        imgPvaText = self.text_font.render("Player vs AI", self.text_font, self.BLACK)
+        self.screen.blit(imgPvaText, (self.pvaButton.right+5, self.pvaButton.topleft[1]))
+        
+        #AI Algorithm text
+        imgAIModeText = self.text_font.render("AI Algorithm:", self.text_font, self.BLACK)
+        self.screen.blit(imgAIModeText, (self.negamaxButton.topleft[0], self.negamaxButton.topleft[1]-16))
+        #Negamax Text
+        imgNegamaxText = self.text_font.render("Negamax", self.text_font, self.BLACK)
+        self.screen.blit(imgNegamaxText, (self.negamaxButton.right+5, self.negamaxButton.topleft[1]))
+        #Minimax Text
+        imgMinimaxText = self.text_font.render("Minimax", self.text_font, self.BLACK)
+        self.screen.blit(imgMinimaxText, (self.minimaxButton.right+5, self.minimaxButton.topleft[1]))
+        
+        #Symbol Select Text
+        imgSymbolText = self.text_font.render("Player 1 Symbol:", self.text_font, self.BLACK)
+        self.screen.blit(imgSymbolText, (self.noughtButton.topleft[0], self.GUI_HEIGHT - 34))
+        #Nought symbol Text
+        imgNoughtText = self.text_font.render("O", self.text_font, self.BLACK)
+        self.screen.blit(imgNoughtText, (self.noughtButton.right+5, self.noughtButton.topleft[1]))
+        #Cross symbol Text
+        imgCrossText = self.text_font.render("X", self.text_font, self.BLACK)
+        self.screen.blit(imgCrossText, (self.crossButton.right+5, self.crossButton.topleft[1]))
+        
+        #Start Button Text
+        imgStartText = self.text_font.render("Start", self.text_font, self.BLACK)
+        self.screen.blit(imgStartText, (self.startButton.centerx-14, self.startButton.centery-5))
+        #Reset Button Text
+        imgResetText = self.text_font.render("Reset", self.text_font, self.BLACK)
+        self.screen.blit(imgResetText, (self.resetButton.centerx-15, self.resetButton.centery-5))
+        
+        #Screen Resolution Size Text
+        imgScreenSizeText = self.text_font.render("Screen Size:", self.text_font, self.BLACK)
+        self.screen.blit(imgScreenSizeText, (self.smallResolutionButton.centerx - 87, self.smallResolutionButton.centery-5))
+        #Small Screen Text
+        imgScreenSText = self.text_font.render("S", self.text_font, self.WHITE)
+        self.screen.blit(imgScreenSText, (self.smallResolutionButton.centerx-3, self.smallResolutionButton.centery-5))
+        #Medium Screen Text
+        imgScreenMText = self.text_font.render("M", self.text_font, self.WHITE)
+        self.screen.blit(imgScreenMText, (self.mediumResolutionButton.centerx-6, self.mediumResolutionButton.centery-5))
+        #Large Screen Text
+        imgScreenLText = self.text_font.render("L", self.text_font, self.WHITE)
+        self.screen.blit(imgScreenLText, (self.largeResolutionButton.centerx-3, self.largeResolutionButton.centery-5))
+        
+        #Board Size Text
+        imgBoardSizeText = self.text_font.render("Board Size:", self.text_font, self.BLACK)
+        self.screen.blit(imgBoardSizeText, (self.gridResizeButton3.centerx - 84, self.gridResizeButton3.centery-5)) 
+        #3x3 Board Size Text
+        imgBoard3Text = self.text_font.render("3", self.text_font, self.WHITE)
+        self.screen.blit(imgBoard3Text, (self.gridResizeButton3.centerx-3, self.gridResizeButton3.centery-5))
+        #4x4 Board Size Text
+        imgBoard4Text = self.text_font.render("4", self.text_font, self.WHITE)
+        self.screen.blit(imgBoard4Text, (self.gridResizeButton4.centerx-3, self.gridResizeButton4.centery-5))
+        #5x5 Board Size Text
+        imgBoard5Text = self.text_font.render("5", self.text_font, self.WHITE)
+        self.screen.blit(imgBoard5Text, (self.gridResizeButton5.centerx-3, self.gridResizeButton5.centery-5))
+        
+        #Display Text
+        self.displayText = "Select Start to Play"
+        imgDisplayText = self.text_font.render(self.displayText, self.text_font, self.BLACK)
+        self.screen.blit(imgDisplayText, (self.displayRect.centerx-57, self.displayRect.centery-5)) 
+        
         """
         GUI...
         Need to add code to keep track of the winner of the current game
@@ -134,6 +258,16 @@ class RandomBoardTicTacToe:
             pygame.display.set_caption("Tic Tac Toe - O's turn")
         else:
             pygame.display.set_caption("Tic Tac Toe - X's turn")
+            
+        #Update Display Text
+        if self.game_state.turn_O == True:
+            self.displayText = "O's Turn"
+        else:
+            self.displayText = "X's Turn"
+        pygame.draw.rect(self.screen, (160, 171, 192), self.displayRect, 0, 2)
+        pygame.draw.rect(self.screen, (50,50,50), self.displayRect, 3, 2)
+        imgDisplayText = self.text_font.render(self.displayText, self.text_font, self.BLACK)
+        self.screen.blit(imgDisplayText, (self.displayRect.centerx-25, self.displayRect.centery-5)) 
 
     #FINSIHED
     def draw_circle(self, x, y):
@@ -173,6 +307,11 @@ class RandomBoardTicTacToe:
         THE RETURN VALUES FROM YOUR MINIMAX/NEGAMAX ALGORITHM SHOULD BE THE SCORE, MOVE WHERE SCORE IS AN INTEGER
         NUMBER AND MOVE IS AN X,Y LOCATION RETURNED BY THE AGENT
         """
+        if self.aiSelectNegamax == True:
+            print("Using Negamax Algorithm")
+        else:
+            print("Using Minimax Algorithm")
+        
         
         self.change_turn()
         pygame.display.update()
@@ -256,6 +395,7 @@ class RandomBoardTicTacToe:
                             self.GUI_HEIGHT = self.size[1]-self.size[0]
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            self.screenSizeOption = 0
                             tictactoegame.game_reset()
                         if self.mediumResolutionButton.collidepoint(mouseCoordinates):
                             self.width = 700
@@ -264,6 +404,7 @@ class RandomBoardTicTacToe:
                             self.GUI_HEIGHT = self.size[1]-self.size[0]
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            self.screenSizeOption = 1
                             tictactoegame.game_reset()
                         if self.largeResolutionButton.collidepoint(mouseCoordinates):
                             self.width = 800
@@ -272,6 +413,7 @@ class RandomBoardTicTacToe:
                             self.GUI_HEIGHT = self.size[1]-self.size[0]
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
+                            self.screenSizeOption = 2
                             tictactoegame.game_reset()
 
                         """
@@ -287,28 +429,61 @@ class RandomBoardTicTacToe:
                             self.GRID_SIZE = 4
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
-                            tictactoegame.game_reset() # redraw board to update size
+                            tictactoegame.game_reset() # redraw board to update size 
                         if self.gridResizeButton5.collidepoint(mouseCoordinates):
                             self.GRID_SIZE = 5
                             self.WIDTH = self.size[0]/self.GRID_SIZE - self.OFFSET
                             self.HEIGHT = (self.size[1]-self.GUI_HEIGHT)/self.GRID_SIZE - self.OFFSET
-                            tictactoegame.game_reset() #redraw board to update size
+                            tictactoegame.game_reset() #redraw board to update size  
+                            
 
                         # Buttons to swap between game modes
                         if self.pvpButton.collidepoint(mouseCoordinates):
                             print("Activating PvP:")
                             mode = "player_vs_player"
+                            #Draw dot for PvP Option
+                            pygame.draw.circle(self.screen, self.BLACK, (self.pvpButton.centerx,self.pvpButton.centery), 4, 0)
+                            #"Erase" Dot on PvA Option
+                            pygame.draw.circle(self.screen, self.BLUE, (22, 44), 7, 0)
                         if self.pvaButton.collidepoint(mouseCoordinates):
                             print("Activating PvC:")
                             mode = "player_vs_ai"
+                            #Draw dot for PvA Option
+                            pygame.draw.circle(self.screen, self.BLACK, (self.pvaButton.centerx,self.pvaButton.centery), 4, 0)
+                            #"Erase" Dot for PvP Option
+                            pygame.draw.circle(self.screen, self.BLUE, (22, 25), 7, 0)
+                        
+                        #Buttons to switch Negamax or Minimax Algorithms
+                        if self.negamaxButton.collidepoint(mouseCoordinates):
+                            print("Negamax Algorithm Selected")
+                            self.aiSelectNegamax = True
+                            #Draw dot for Negamax
+                            pygame.draw.circle(self.screen, self.BLACK, (self.negamaxButton.centerx,self.negamaxButton.centery), 4, 0)
+                            #"Erase" minimax dot
+                            pygame.draw.circle(self.screen, self.BLUE, (22, (self.GUI_HEIGHT/2)+27), 7, 0)
+                        if self.minimaxButton.collidepoint(mouseCoordinates):
+                            print("Minimax Algorithm Selected")
+                            self.aiSelectNegamax = False
+                            #Draw dot for minimax
+                            pygame.draw.circle(self.screen, self.BLACK, (self.minimaxButton.centerx,self.minimaxButton.centery), 4, 0)
+                            #"Erase" negamax dot
+                            pygame.draw.circle(self.screen, self.BLUE, (22, (self.GUI_HEIGHT/2)+8), 7, 0)
 
                         # Buttons to swap between nought or cross
                         if self.noughtButton.collidepoint(mouseCoordinates):
                             print("Switching to nought (O)")
                             self.game_state.turn_O = True
+                            #Draw dot to show O selection
+                            pygame.draw.circle(self.screen, self.BLACK, (self.noughtButton.centerx,self.noughtButton.centery), 4, 0)
+                            #"Erase" dot for X selection
+                            pygame.draw.circle(self.screen, self.BLUE, (66, self.GUI_HEIGHT-10), 7, 0)
                         if self.crossButton.collidepoint(mouseCoordinates):
                             print("Switching to cross (X)")
                             self.game_state.turn_O = False
+                            #Draw dot to show X Selection
+                            pygame.draw.circle(self.screen, self.BLACK, (self.crossButton.centerx,self.crossButton.centery), 4, 0)
+                            #"Erase" dot for O Selection
+                            pygame.draw.circle(self.screen, self.BLUE, (22, self.GUI_HEIGHT-10), 7, 0)
 
                     #Buttons that work if a game is in progress
                     if gameStarted:
@@ -325,6 +500,7 @@ class RandomBoardTicTacToe:
                         # If game hasn't started yet, but user hits start button, then let user know
                         if self.startButton.collidepoint(mouseCoordinates):
                             print("Game already started...")
+                            
 
                         # Clears the grid, only works if the user has started the game, as it would be redundant other wise
                         if self.resetButton.collidepoint(mouseCoordinates):
@@ -353,6 +529,13 @@ class RandomBoardTicTacToe:
                             if tictactoegame.is_game_over():
                                 #Put code here to calculate scores and determine a winner
                                 print("GAME IS OVER SUCKA")
+                                # Update Display Text
+                                # TODO: ***Change self.displayText to output winner********************************
+                                self.displayText = "GAME OVER"
+                                pygame.draw.rect(self.screen, (160, 171, 192), self.displayRect, 0, 2)
+                                pygame.draw.rect(self.screen, (50,50,50), self.displayRect, 3, 2)
+                                imgDisplayText = self.text_font.render(self.displayText, self.text_font, self.BLACK)
+                                self.screen.blit(imgDisplayText, (self.displayRect.centerx-38, self.displayRect.centery-5)) 
                                 break
 
                             #end the player's turn
@@ -363,6 +546,7 @@ class RandomBoardTicTacToe:
                             #if the mode is player vs player, then the next player will simply start their turn
                             if mode == "player_vs_ai":
                                 print("activate AI here:")
+                                self.play_ai()
 
                         # Debugging to ensure that the user as already selected a spot on the tic-tac-toe grid
                         else:

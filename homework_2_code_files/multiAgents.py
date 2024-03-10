@@ -6,7 +6,7 @@ def minimax(game_state: GameStatus, depth: int, maximizingPlayer: bool, alpha=fl
         newScores = game_state.get_scores(terminal)
         return newScores, None
 
-	"""
+    """
  YOUR CODE HERE TO FIRST CHECK WHICH PLAYER HAS CALLED THIS FUNCTION (MAXIMIZING OR MINIMIZING PLAYER)
     YOU SHOULD THEN IMPLEMENT MINIMAX WITH ALPHA-BETA PRUNING AND RETURN THE FOLLOWING TWO ITEMS
     1. VALUE
@@ -47,13 +47,13 @@ def negamax(game_status: GameStatus, depth: int, turn_multiplier: int, alpha=flo
         scores = game_status.get_negamax_scores(terminal)
         return scores * turn_multiplier, None
 
-	"""
+    """
     YOUR CODE HERE TO CALL NEGAMAX FUNCTION. REMEMBER THE RETURN OF THE NEGAMAX SHOULD BE THE OPPOSITE OF THE CALLING
     PLAYER WHICH CAN BE DONE USING -NEGAMAX(). THE REST OF YOUR CODE SHOULD BE THE SAME AS MINIMAX FUNCTION.
     YOU ALSO DO NOT NEED TO TRACK WHICH PLAYER HAS CALLED THE FUNCTION AND SHOULD NOT CHECK IF THE CURRENT MOVE
     IS FOR MINIMAX PLAYER OR NEGAMAX PLAYER    
     """
-   Value = float('-inf')  # both max and min are treated as max and need worst possible
+    Value = float('-inf')  # both max and min are treated as max and need worst possible
     best_Move = None
 
     for move in game_status.get_moves():
