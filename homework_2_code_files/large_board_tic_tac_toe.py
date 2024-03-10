@@ -238,19 +238,8 @@ class RandomBoardTicTacToe:
         imgDisplayText = self.text_font.render(self.displayText, self.text_font, self.BLACK)
         self.screen.blit(imgDisplayText, (self.displayRect.centerx-55, self.displayRect.centery-5))
         
-        #Player's score Text
-        self.playerScoreHeaderText1 = "Player 1 Score"
-        imgPlayerScoreHeaderText1 = self.text_font.render(self.playerScoreHeaderText1, self.text_font, self.BLACK)
-        self.screen.blit(imgPlayerScoreHeaderText1, (self.scoreRect.centerx-85, self.scoreRect.centery-16))
-        self.playerScoreHeaderText2 = "Player 2 Score"
-        imgPlayerScoreHeaderText2 = self.text_font.render(self.playerScoreHeaderText2, self.text_font, self.BLACK)
-        self.screen.blit(imgPlayerScoreHeaderText2, (self.scoreRect.centerx+8, self.scoreRect.centery-16)) 
-        self.playerScoreText1 = "0"
-        imgPlayerScoreText1 = self.text_font.render(self.playerScoreText1, self.text_font, self.BLACK)
-        self.screen.blit(imgPlayerScoreText1, (self.scoreRect.centerx-47, self.scoreRect.centery+1))
-        self.playerScoreText2 = "0"
-        imgPlayerScoreText2 = self.text_font.render(self.playerScoreText2, self.text_font, self.BLACK)
-        self.screen.blit(imgPlayerScoreText2, (self.scoreRect.centerx+46, self.scoreRect.centery+1))
+        #Set default values for scores
+        self.updateScores(0, 0)
         
         """
         GUI...
@@ -269,6 +258,32 @@ class RandomBoardTicTacToe:
                 pygame.draw.rect(self.screen, self.WHITE, gridRect,0,2)
         
         pygame.display.update()
+    
+    #Custom Helper function to update player scores (Paremeters: integers for player scores)
+    def updateScores(self, score1, score2):
+        #Draw rectangle for score window
+        self.scoreRect = pygame.Rect(((self.width/3), self.GUI_HEIGHT - 54), ((self.width/3), (self.GUI_HEIGHT/3)-(8*self.screenSizeOption)))
+        pygame.draw.rect(self.screen, (160, 171, 192), self.scoreRect, 0, 2)
+        pygame.draw.rect(self.screen, (50,50,50), self.scoreRect, 3, 2)
+        
+        #Convert integers to strings for text
+        scoreText1 = str(score1)
+        scoreText2 = str(score2)
+        
+        #Draw Player's score Text
+        self.playerScoreHeaderText1 = "Player 1 Score"
+        imgPlayerScoreHeaderText1 = self.text_font.render(self.playerScoreHeaderText1, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreHeaderText1, (self.scoreRect.centerx-85, self.scoreRect.centery-16))
+        self.playerScoreHeaderText2 = "Player 2 Score"
+        imgPlayerScoreHeaderText2 = self.text_font.render(self.playerScoreHeaderText2, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreHeaderText2, (self.scoreRect.centerx+8, self.scoreRect.centery-16)) 
+        self.playerScoreText1 = scoreText1
+        imgPlayerScoreText1 = self.text_font.render(self.playerScoreText1, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreText1, (self.scoreRect.centerx-47, self.scoreRect.centery+1))
+        self.playerScoreText2 = scoreText2
+        imgPlayerScoreText2 = self.text_font.render(self.playerScoreText2, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreText2, (self.scoreRect.centerx+46, self.scoreRect.centery+1))
+        
 
     #Basically just changes the title of the window based on who's turn it is
     def change_turn(self):
