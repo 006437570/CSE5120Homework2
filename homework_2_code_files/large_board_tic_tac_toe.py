@@ -26,12 +26,10 @@ class RandomBoardTicTacToe:
     def __init__(self, size = (600, 750)):
         self.game_state = GameStatus(board_state=[],turn_O=True)
 
-        """
-        Defines the top portion of the screen to be for the GUI
-        Specifically, this is used to prevent the game board grid 
-        from losing its 'square' shape and allows it to be 
-        separate from the GUI.
-        """
+        #Defines the top portion of the screen to be for the GUI
+        #Specifically, this is used to prevent the game board grid 
+        #from losing its 'square' shape and allows it to be 
+        #separate from the GUI.
         self.GUI_HEIGHT = size[1]-size[0]
 
         self.size = self.width, self.height = size
@@ -69,9 +67,6 @@ class RandomBoardTicTacToe:
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption("Tic Tac Toe Random Grid")
         self.screen.fill(self.BLACK)
-        """
-        YOUR CODE HERE TO DRAW THE GRID OTHER CONTROLS AS PART OF THE GUI
-        """
 
         #CODE WILL GO HERE TO DISPLAY THE GUI OPTIONS
         # Basically the background color for the GUI
@@ -116,7 +111,7 @@ class RandomBoardTicTacToe:
         and to keep track of the total wins for player and AI
         """
 
-        # Draw the grid
+        # Draws the grid
         # loop that will print out the blank tic tac toe board
         # 2 for loops, so it reflects a 2D array
         print("Drawing grid of size:", self.GRID_SIZE)
@@ -136,11 +131,13 @@ class RandomBoardTicTacToe:
             pygame.display.set_caption("Tic Tac Toe - X's turn")
 
     #FINSIHED
+    #Draws a circle at the given location
     def draw_circle(self, x, y):
         # Draws a circle at the center of the block
         pygame.draw.circle(self.screen, self.BLUE, (x,y+self.GUI_HEIGHT), self.WIDTH/2, 5)
         
     # FINSIHED
+    #Dras a cross at the given location
     def draw_cross(self, x, y):
         # Draws 2 diagonal lines that reach from one corner of a grid cell 
         # to the other. 
@@ -149,6 +146,7 @@ class RandomBoardTicTacToe:
             pygame.draw.aaline(self.screen, self.RED, ((self.WIDTH+x+i)-self.MARGIN, y+self.GUI_HEIGHT), (x+i, self.HEIGHT+y+self.GUI_HEIGHT))
 
     # FINISHED??????????????????????????????????????
+    #Returns bool that determines if the game is over
     def is_game_over(self):
         if self.game_state.is_terminal()[0]:
             return True
@@ -312,13 +310,6 @@ class RandomBoardTicTacToe:
 
                     #Buttons that work if a game is in progress
                     if gameStarted:
-                        if self.game_state.turn_O:
-                            player1, player2 = 1, -1
-                        else:
-                            player1, player2 = -1, 1
-                        print("Player 1:",player1)
-                        print("Player 2:", player2)
-                            
                         #Change window caption if the game has started
                         tictactoegame.change_turn()
 
@@ -345,14 +336,16 @@ class RandomBoardTicTacToe:
                             else:
                                 tictactoegame.draw_cross((self.MARGIN + self.WIDTH) * selectedX + self.MARGIN, (self.MARGIN + self.HEIGHT) * selectedY + self.MARGIN)
                             
-                            # Update tic-tac-toe board with a value
+                            # Update tic-tac-toe board with a value based on whos turn it is
                             self.game_state.get_new_state([selectedX,selectedY])
                             print(np.array(self.game_state.board_state))
 
                             #Check is the game is over
                             if tictactoegame.is_game_over():
                                 #Put code here to calculate scores and determine a winner
-                                print("GAME IS OVER SUCKA")
+                                print("!!!Attention!!!\nGame is over...")
+                                print("The final score is:",self.game_state.get_scores(tictactoegame.is_game_over()))
+                                print("The winner is:",self.game_state.is_terminal()[1])
                                 break
 
                             #end the player's turn
