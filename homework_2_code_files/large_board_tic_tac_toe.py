@@ -121,7 +121,7 @@ class RandomBoardTicTacToe:
         self.negamaxButton = pygame.draw.circle(self.screen, self.BLUE, (22, (self.GUI_HEIGHT/2)+8), 7, 0)
         self.minimaxButton = pygame.draw.circle(self.screen, self.BLUE, (22, (self.GUI_HEIGHT/2)+27), 7, 0)
         #Draw dot to show current AI algorithm selection
-        if self.aiSelectNegamax == True:   
+        if self.aiSelectNegamax:   
             pygame.draw.circle(self.screen, self.BLACK, (self.negamaxButton.centerx,self.negamaxButton.centery), 4, 0)
         else:
             pygame.draw.circle(self.screen, self.BLACK, (self.minimaxButton.centerx,self.minimaxButton.centery), 4, 0)
@@ -130,7 +130,7 @@ class RandomBoardTicTacToe:
         self.noughtButton = pygame.draw.circle(self.screen, self.BLUE, (22, self.GUI_HEIGHT-10), 7, 0)
         self.crossButton = pygame.draw.circle(self.screen, self.BLUE, (66, self.GUI_HEIGHT-10), 7, 0)
         #Draw dot to show symbol selection
-        if self.game_state.turn_O == True:
+        if self.game_state.turn_O:
             pygame.draw.circle(self.screen, self.BLACK, (self.noughtButton.centerx,self.noughtButton.centery), 4, 0)
         else:
             pygame.draw.circle(self.screen, self.BLACK, (self.crossButton.centerx,self.noughtButton.centery), 4, 0)
@@ -157,9 +157,13 @@ class RandomBoardTicTacToe:
         
         
         #Display Screen for Instructions, information for which symbol is playing, and results
-        self.displayRect = pygame.Rect(((self.width/3), 5), ((self.width/3), self.GUI_HEIGHT-10))
+        self.displayRect = pygame.Rect(((self.width/3), 5), ((self.width/3), self.GUI_HEIGHT-60))
         pygame.draw.rect(self.screen, (160, 171, 192), self.displayRect, 0, 2)
         pygame.draw.rect(self.screen, (50,50,50), self.displayRect, 3, 2)
+        
+        self.scoreRect = pygame.Rect(((self.width/3), self.GUI_HEIGHT - 54), ((self.width/3), (self.GUI_HEIGHT/3)-(8*self.screenSizeOption)))
+        pygame.draw.rect(self.screen, (160, 171, 192), self.scoreRect, 0, 2)
+        pygame.draw.rect(self.screen, (50,50,50), self.scoreRect, 3, 2)
         
 
         #Text for GUI=========================================================================
@@ -232,7 +236,21 @@ class RandomBoardTicTacToe:
         #Display Text
         self.displayText = "Select Start to Play"
         imgDisplayText = self.text_font.render(self.displayText, self.text_font, self.BLACK)
-        self.screen.blit(imgDisplayText, (self.displayRect.centerx-57, self.displayRect.centery-5)) 
+        self.screen.blit(imgDisplayText, (self.displayRect.centerx-55, self.displayRect.centery-5))
+        
+        #Player's score Text
+        self.playerScoreHeaderText1 = "Player 1 Score"
+        imgPlayerScoreHeaderText1 = self.text_font.render(self.playerScoreHeaderText1, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreHeaderText1, (self.scoreRect.centerx-85, self.scoreRect.centery-16))
+        self.playerScoreHeaderText2 = "Player 2 Score"
+        imgPlayerScoreHeaderText2 = self.text_font.render(self.playerScoreHeaderText2, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreHeaderText2, (self.scoreRect.centerx+8, self.scoreRect.centery-16)) 
+        self.playerScoreText1 = "0"
+        imgPlayerScoreText1 = self.text_font.render(self.playerScoreText1, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreText1, (self.scoreRect.centerx-47, self.scoreRect.centery+1))
+        self.playerScoreText2 = "0"
+        imgPlayerScoreText2 = self.text_font.render(self.playerScoreText2, self.text_font, self.BLACK)
+        self.screen.blit(imgPlayerScoreText2, (self.scoreRect.centerx+46, self.scoreRect.centery+1))
         
         """
         GUI...
@@ -260,7 +278,7 @@ class RandomBoardTicTacToe:
             pygame.display.set_caption("Tic Tac Toe - X's turn")
             
         #Update Display Text
-        if self.game_state.turn_O == True:
+        if self.game_state.turn_O:
             self.displayText = "O's Turn"
         else:
             self.displayText = "X's Turn"
@@ -307,7 +325,7 @@ class RandomBoardTicTacToe:
         THE RETURN VALUES FROM YOUR MINIMAX/NEGAMAX ALGORITHM SHOULD BE THE SCORE, MOVE WHERE SCORE IS AN INTEGER
         NUMBER AND MOVE IS AN X,Y LOCATION RETURNED BY THE AGENT
         """
-        if self.aiSelectNegamax == True:
+        if self.aiSelectNegamax:
             print("Using Negamax Algorithm")
         else:
             print("Using Minimax Algorithm")
@@ -531,11 +549,11 @@ class RandomBoardTicTacToe:
                                 print("GAME IS OVER SUCKA")
                                 # Update Display Text
                                 # TODO: ***Change self.displayText to output winner********************************
-                                self.displayText = "GAME OVER"
+                                self.displayText = self.game_state.winner + "[Winner] Wins!"
                                 pygame.draw.rect(self.screen, (160, 171, 192), self.displayRect, 0, 2)
                                 pygame.draw.rect(self.screen, (50,50,50), self.displayRect, 3, 2)
                                 imgDisplayText = self.text_font.render(self.displayText, self.text_font, self.BLACK)
-                                self.screen.blit(imgDisplayText, (self.displayRect.centerx-38, self.displayRect.centery-5)) 
+                                self.screen.blit(imgDisplayText, (self.displayRect.centerx-47, self.displayRect.centery-5)) 
                                 break
 
                             #end the player's turn
