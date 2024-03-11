@@ -564,7 +564,8 @@ class RandomBoardTicTacToe:
                                 print("GAME IS OVER SUCKA")
                                 # Update Display Text
                                 # TODO: ***Change self.displayText to output winner********************************
-                                self.displayText = self.game_state.winner + "[Winner] Wins!"
+                                self.game_state.get_scores(self.game_state.is_terminal()[0])
+                                self.displayText = self.game_state.winner + " Wins!"
                                 pygame.draw.rect(self.screen, (160, 171, 192), self.displayRect, 0, 2)
                                 pygame.draw.rect(self.screen, (50,50,50), self.displayRect, 3, 2)
                                 imgDisplayText = self.text_font.render(self.displayText, self.text_font, self.BLACK)
